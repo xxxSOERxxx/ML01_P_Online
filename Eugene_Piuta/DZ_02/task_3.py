@@ -42,3 +42,4 @@ singular_point = 25/52
 print(f"Особая точка: {singular_point}")
 
 # dsfhoih
+# fdksf
