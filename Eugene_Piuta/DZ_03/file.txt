@@ -1,0 +1,36 @@
+Object detection is an essential component of computer
+vision systems, enabling automated identification and localization of objects within images or video frames [34]. Its
+applications span from autonomous driving and robotics [16]
+[5] [20] [56] to inventory management, video surveillance, and
+sports analysis [4] [23] [55] [69].
+Over the years, object detection has developed significantly.
+Initially, traditional methods such as the Viola-Jones algorithm
+[63] and the Deformable Part-based Model (DPM) [15] used
+handcrafted features and were effective for applications such
+as face detection [63], pedestrian detection [10], and video
+surveillance [3]. However, these methods had limitations in
+robustness and generalization. With the advancement of deep
+learning, network-based methods have since become the primary approach. These methods are usually classified into two
+categories: one-stage and two-stage approaches.
+One-stage methods such as RetinaNet [32] and SSD (Single Shot MultiBox Detector) [35] perform detection in a
+single pass, balancing speed and accuracy. In contrast, twostage methods, such as Region-based Convolutional Neural
+Networks (R-CNN) [19], generate region proposals and then
+perform classification, offering high precision but being computationally intensive.
+Among one-stage object detection methods, YOLO (You
+Only Look Once) stands out for its robustness and efficiency. Initially introduced in 2015 by Redmon et al. [21],
+YOLO redefined object detection by predicting bounding
+boxes and class probabilities directly from full images in
+a single evaluation [47]. This innovative approach allowed
+YOLOv1 to achieve real-time object detection with impressive
+accuracy. Building upon this foundation, YOLOv2 [48] incorporated several key enhancements. It integrated the Darknet19 framework, a 19-layer convolutional neural network that
+improved feature extraction. YOLOv2 also introduced batch
+normalization and employed data augmentation techniques
+inspired by the VGG architecture [57] to enhance the model’s
+generalization. YOLOv3 [49] further advanced the model with
+the Darknet-53 framework, a deeper network that significantly
+improved feature extraction capabilities. This version also
+utilized a Feature Pyramid Network (FPN)-inspired design,
+which allowed for better detection across various object scales
+by combining high-level semantic features with low-level
+detailed features, and a Three-Scale detection mechanism that
+improved accuracy for objects of different sizes.

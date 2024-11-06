@@ -1,0 +1,14 @@
+with open("Eugene_Piuta/DZ_03/file.txt", "r") as f:
+    s = f.read()
+words = s.split(" ")
+print(f"Количество слов в тексте: {len(words)}")
+
+def find_words():    
+    unique_words = set()
+    for word in words:
+        unique_words.add(word)
+    n = len(unique_words)
+    return(n)
+
+print(f"Количество уникальных слов: {find_words()}")
+print("Конец работы")
