@@ -8,11 +8,11 @@
 
 3 Подсчитать количество гласных и согласных букв.
 
-4
+4.
 
 """
 from string import punctuation
-#import nltk
+import nltk, copy
 
 #1 Загрузить файл, прочитать его и сохранить текст в переменную text.
 with open("Eugene_Piuta/DZ_03/file1.txt", encoding='utf-8') as f:
@@ -27,12 +27,13 @@ exclude = set(set(punctuation)|numbers)
 exclude.add("…")
 exclude.add("“")
 exclude.add("”")
-text = ''.join(ch for ch in text if ch not in exclude)
-text = text.lower()
-print(text)
+text_new =copy.copy(text)
+text_new = ''.join(ch for ch in text_new if ch not in exclude)
+text_new = text_new.lower()
+print(text_new)
 
 #2.2 Разбиваем текст на слова.
-words = text.split(" ")
+words = text_new.split(" ")
 
 #2.3 Подсчитать количество уникальных слов.
 def find_words():    
@@ -45,11 +46,19 @@ def find_words():
 print(f"Количество уникальных слов: {find_words()}")
 
 # 3 Подсчитать количество гласных и согласных букв.
-
 gls = "аеиоуюя"
 gls_count = 0
 for letter in gls:
-     gls_count += text.count(letter)
-sogl_count = len(text) - gls_count
+     gls_count += text_new.count(letter)
+sogl_count = len(text_new) - gls_count
 print(f"Количество гласных букв в тексте: {gls_count}\n"
         f"Количество согласных букв в тексте: {sogl_count}")
+
+# 4.1 Находим количество предложений с помощью nltk
+from nltk.tokenize import sent_tokenize
+#nltk.download("stopwords")
+#nltk.download('punkt_tab')
+sentences = sent_tokenize(text, language="russian")
+print((f"Количество предложений в тексте: {len(sentences)}"))
+print(text)
+print(sentences)
