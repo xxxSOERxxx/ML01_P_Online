@@ -1,25 +1,13 @@
-# --------------------------------------------------------
-# Fast-iTPN: Integrally Pre-Trained Transformer Pyramid Network with Token Migration
-# Github source: https://github.com/sunsmarterjie/iTPN/tree/main/fast_itpn
-# Copyright (c) 2023 University of Chinese Academy of Sciences
-# Licensed under The MIT License [see LICENSE for details]
-# By Yunjie Tian
-# Based on EVA02, timm and deit code bases
-# https://github.com/baaivision/EVA/tree/master/EVA-02
-# https://github.com/rwightman/pytorch-image-models/tree/master/timm
-# https://github.com/facebookresearch/deit/
-# --------------------------------------------------------'
 from functools import partial
 import warnings
 import math
 import torch
 import torch.nn as nn
-from timm.models.registry import register_model
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
 from timm.models.layers import to_2tuple, drop_path, trunc_normal_
-
-from torch import Tensor, Size
+#from timm.models.layers import drop_path, trunc_normal_
+from torch import  Size
 from typing import Union, List
 import os
 
@@ -40,8 +28,7 @@ _shape_t = Union[int, List[int], Size]
 
 
 class DropPath(nn.Module):
-    """Drop paths (Stochastic Depth) per sample  (when applied in main path of residual blocks).
-    """
+   
 
     def __init__(self, drop_prob=None):
         super(DropPath, self).__init__()
@@ -459,8 +446,10 @@ class ConvMlpBlock(nn.Module):
 class PatchEmbed(nn.Module):
     def __init__(self, img_size=224, patch_size=16, inner_patches=4, in_chans=3, embed_dim=128, norm_layer=None):
         super().__init__()
+        
         img_size = to_2tuple(img_size)
         patch_size = to_2tuple(patch_size)
+        
         patches_resolution = [img_size[0] // patch_size[0], img_size[1] // patch_size[1]]
         self.img_size = img_size
         self.patch_size = patch_size
@@ -491,16 +480,18 @@ class PatchEmbed(nn.Module):
             x = self.norm(x)
         return x
 
-
 class ConvPatchEmbed(nn.Module):
     def __init__(self, search_size=224,template_size=112, patch_size=16, inner_patches=4, in_chans=3, embed_dim=128, norm_layer=None,
                  stop_grad_conv1=False):
         super().__init__()
+        
         search_size = to_2tuple(search_size)
         template_size = to_2tuple(template_size)
         patch_size = to_2tuple(patch_size)
+        
         patches_resolution_search = [search_size[0] // patch_size[0], search_size[1] // patch_size[1]]
         patches_resolution_template = [template_size[0] // patch_size[0], template_size[1] // patch_size[1]]
+        
         self.search_size = search_size
         self.template_size = template_size
         self.patch_size = patch_size
@@ -520,6 +511,7 @@ class ConvPatchEmbed(nn.Module):
             self.norm = norm_layer(embed_dim)
         else:
             self.norm = None
+            
 
     def forward(self, x, bool_masked_pos=None, mask_token=None):
         B, C, H, W = x.shape
@@ -1080,7 +1072,7 @@ def load_pretrained(model, checkpoint, pos_type):
     model.load_state_dict(state_dict, strict=False)
 
 
-@register_model
+
 def fastitpnt(pretrained=False, pos_type="interpolate", pretrain_type="", **kwargs):
     model = Fast_iTPN(
         patch_size=16, embed_dim=384, depth_stage1=1, depth_stage2=1, depth=12, num_heads=6, bridge_mlp_ratio=3.,
@@ -1089,60 +1081,6 @@ def fastitpnt(pretrained=False, pos_type="interpolate", pretrain_type="", **kwar
         naiveswiglu=True,
         subln=True,
         pos_type=pos_type,
-        **kwargs)
-    model.default_cfg = _cfg()
-    pretrain_path = current_file_path + pretrain_type
-    if pretrained:
-        checkpoint = torch.load(pretrain_path, map_location="cpu")
-        load_pretrained(model,checkpoint,pos_type)
-    return model
-
-
-@register_model
-def fastitpns(pretrained=False, pos_type="interpolate", pretrain_type="", **kwargs):
-    model = Fast_iTPN(
-        patch_size=16, embed_dim=384, depth_stage1=2, depth_stage2=2, depth=20, num_heads=6, bridge_mlp_ratio=3.,
-        mlp_ratio=3., qkv_bias=True, norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        convmlp=True,
-        naiveswiglu=True,
-        subln=True,
-        pos_type=pos_type,
-        **kwargs)
-    model.default_cfg = _cfg()
-    pretrain_path = current_file_path +  pretrain_type
-    if pretrained:
-        checkpoint = torch.load(pretrain_path, map_location="cpu")
-        load_pretrained(model,checkpoint,pos_type)
-    return model
-
-@register_model
-def fastitpnb(pretrained=False,pos_type="interpolate",pretrain_type="",**kwargs):
-    model = Fast_iTPN(
-        patch_size=16, embed_dim=512, depth_stage1=3, depth_stage2=3, depth=24, num_heads=8, bridge_mlp_ratio=3.,
-        mlp_ratio=3., qkv_bias=True, norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        convmlp=True,
-        naiveswiglu=True,
-        subln=True,
-        pos_type = pos_type,
-        **kwargs)
-    model.default_cfg = _cfg()
-    pretrain_path = current_file_path + pretrain_type
-    if pretrained:
-        checkpoint = torch.load(pretrain_path, map_location="cpu")
-        load_pretrained(model,checkpoint,pos_type)
-        # model.load_state_dict(checkpoint["model"])
-    return model
-
-
-@register_model
-def fastitpnl(pretrained=False,pos_type="interpolate",pretrain_type="", **kwargs):
-    model = Fast_iTPN(
-        patch_size=16, embed_dim=768, depth_stage1=2, depth_stage2=2, depth=40, num_heads=12, bridge_mlp_ratio=3.,
-        mlp_ratio=3., qkv_bias=True, norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        convmlp=True,
-        naiveswiglu=True,
-        subln=True,
-        pos_type="interpolate",
         **kwargs)
     model.default_cfg = _cfg()
     pretrain_path = current_file_path + pretrain_type

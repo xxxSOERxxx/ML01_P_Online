@@ -3,3 +3,5 @@ notMNIST_small/
 *.ipynb.meta
 *.mp4
 *.tar
+*.onnx
+*.pt
