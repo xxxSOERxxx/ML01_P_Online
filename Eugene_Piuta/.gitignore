@@ -4,4 +4,7 @@ notMNIST_small/
 *.mp4
 *.tar
 *.onnx
+*.avi
 *.pt
+*.trt
+val/
