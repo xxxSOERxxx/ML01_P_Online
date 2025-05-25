@@ -8,3 +8,4 @@ notMNIST_small/
 *.pt
 *.trt
 val/
+__pycache__/
