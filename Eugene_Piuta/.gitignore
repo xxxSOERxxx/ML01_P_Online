@@ -1,4 +1,5 @@
 notMNIST_small/
+input_data/
 !imgs_df.csv
 *.ipynb.meta
 *.mp4
